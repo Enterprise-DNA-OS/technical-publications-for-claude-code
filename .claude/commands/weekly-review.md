@@ -1,0 +1,19 @@
+---
+description: Draft the Monday review from attention, manuals and compliance
+---
+
+# weekly-review
+
+Draft the Monday review from attention, manuals and compliance.
+
+Read CLAUDE.md. Run:
+
+```bash
+node scripts/publications.mjs weekly-review
+```
+
+Replace placeholders with operator-supplied facts. Resolve names before a write. If ambiguous, show the candidates and stop. Every write needs the operator's actor label. Never invent a review, reviewer or approval.
+
+Open the resulting draft, check its facts and hand over its path. Never send it.
+
+Use --json when composing another command. Sources and limits are in docs/compliance.md.

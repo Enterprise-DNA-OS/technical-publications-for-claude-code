@@ -1,0 +1,14 @@
+insert into projects(code,name) values('DEMO','Harbour Instruments documentation') on conflict do nothing;
+insert into topics(project_id,code,title,source_path,source_xhtml,language,owner,review_due,approved_revision,approved_by,approved_on)
+select p.id,v.code,v.title,v.path,v.body,'en-NZ',v.owner,current_date+v.days,v.approved,v.reviewer,case when v.approved=1 then current_date-10 end from projects p cross join (values
+ ('T-START','Start the logger','Content/start.htm','<html lang="en-NZ"><head><title>Start the logger</title></head><body><h1>Start the logger</h1><p>Connect the sensor cable before starting a recording.</p><ol><li>Attach the probe.</li><li>Select Record.</li></ol></body></html>','Mere',40,1,'Ari'),
+ ('T-EXPORT','Export a recording','Content/export.htm','<html lang="en-NZ"><head><title>Export a recording</title></head><body><h1>Export a recording</h1><p>Open a completed recording and select Export CSV.</p><p>Keep the original recording with your test record.</p></body></html>','Mere',-12,1,'Ari'),
+ ('T-CLEAN','Clean the sensor','Content/clean.htm','<html lang="en-NZ"><head><title>Clean the sensor</title></head><body><h1>Clean the sensor</h1><p>Disconnect power before cleaning. Wipe the housing with a dry cloth.</p></body></html>','Ari',14,null,null),
+ ('T-FAULT','Find the fault code','Content/fault.htm','<html lang="en-NZ"><head><title>Find the fault code</title></head><body><h1>Find the fault code</h1><p>Record the code shown on the display.</p><img src="missing.png" /></body></html>','Ari',-3,null,null),
+ ('T-SAFE','Store the logger','Content/store.htm','<html lang="en-NZ"><head><title>Store the logger</title></head><body><h1>Store the logger</h1><p>Stop the recording and disconnect the probe.</p></body></html>','Mere',60,1,'Ari'),
+ ('T-SPARE','Legacy adapter note','Content/legacy.htm','<html lang="en-NZ"><head><title>Legacy adapter note</title></head><body><h1>Legacy adapter note</h1><p>Check the adapter label before connecting.</p></body></html>','Jo',-90,null,null)
+) v(code,title,path,body,owner,days,approved,reviewer) where p.code='DEMO' on conflict do nothing;
+insert into publications(project_id,code,name,language,owner,due_on)
+select p.id,v.code,v.name,'en-NZ',v.owner,current_date+v.days from projects p cross join(values('PUB-OPS','Logger operator manual','Mere',5),('PUB-SERVICE','Logger service manual','Ari',-2),('PUB-QUICK','Quick start guide','Jo',7))v(code,name,owner,days) where p.code='DEMO' on conflict do nothing;
+insert into publication_topics(publication_id,topic_id,position)
+select p.id,t.id,v.pos from(values('PUB-OPS','T-START',1),('PUB-OPS','T-EXPORT',2),('PUB-OPS','T-SAFE',3),('PUB-SERVICE','T-START',1),('PUB-SERVICE','T-CLEAN',2),('PUB-SERVICE','T-FAULT',3),('PUB-QUICK','T-START',1),('PUB-QUICK','T-SAFE',2))v(pub,topic,pos) join publications p on p.code=v.pub join topics t on t.code=v.topic on conflict do nothing;

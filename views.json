@@ -1,13 +1,36 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Technical Publications for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Documentation week",
+    "subtitle": "Review dates and release blockers",
     "sections": [
       {
         "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "sql": "select * from v_attention order by due_on,code"
+      },
+      {
+        "title": "Manual deadlines",
+        "sql": "select code,name,due_on,topic_count,topic_blocks,snapshots from v_publications order by due_on"
+      }
+    ]
+  },
+  {
+    "name": "reuse",
+    "title": "Shared topics",
+    "sections": [
+      {
+        "title": "Impact of a topic edit",
+        "sql": "select code,title,owner,manuals,used_in from v_reuse order by manuals desc,code"
+      }
+    ]
+  },
+  {
+    "name": "reviews",
+    "title": "Review queue",
+    "sections": [
+      {
+        "title": "Topics by review date",
+        "sql": "select code,title,owner,revision,review_due,standing from v_review_queue order by review_due"
       }
     ]
   }

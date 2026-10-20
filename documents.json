@@ -1,11 +1,36 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "review-pack",
+    "title": "Manual review assignment",
+    "for_each": "select id,code from publications order by code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Manual",
+        "sql": "select code,name,owner,language,due_on from publications where id=$1"
+      },
+      {
+        "title": "Review assignments",
+        "sql": "select pt.position,t.code,t.title,t.owner,t.revision,t.approved_by,t.review_due from publication_topics pt join topics t on t.id=pt.topic_id where pt.publication_id=$1 order by pt.position",
+        "note": "Review the exact revision. A later content change clears approval."
+      }
+    ]
+  },
+  {
+    "name": "release-register",
+    "title": "Manual release register",
+    "for_each": "select id,code from publications order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Retained versions",
+        "sql": "select version,actor,created_at from releases where publication_id=$1 order by created_at",
+        "note": "Each retained version contains an immutable content snapshot. No external publication occurs."
+      },
+      {
+        "title": "Current assembly",
+        "sql": "select pt.position,t.code,t.title,t.revision,t.approved_revision,t.review_due from publication_topics pt join topics t on t.id=pt.topic_id where pt.publication_id=$1 order by pt.position"
+      }
     ]
   }
 ]
