@@ -31,6 +31,7 @@ export async function importFlare(db,root,o){
  for(const f of manualFiles){
   const xml=f.bytes.toString('utf8');if(/<!DOCTYPE|<!ENTITY/i.test(xml))throw Error('TOC must not contain external declarations');
   const valid=XMLValidator.validate(xml);if(valid!==true)throw Error('Invalid TOC '+f.path+': '+valid.err.msg);
+  if(/(?:MadCap:conditions|ConditionTagExpression|\[%=)/i.test(xml))throw Error('Conditional or variable TOC requires conversion before import: '+f.path);
   const data=new XMLParser({ignoreAttributes:false,processEntities:false}).parse(xml);
   const refs=tocEntries(data).map(h=>relativeSource('Content/index.htm',h));
   if(new Set(refs).size!==refs.length)throw Error('Repeated topic in TOC requires manual conversion: '+f.path);

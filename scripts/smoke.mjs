@@ -82,6 +82,8 @@ try{
  await call('import',...impArgs,'--update-existing');eq((await call('topic',order[0].code)).topic.revision,2);eq((await call('topic',order[0].code)).topic.approved_revision,null);
  writeFileSync(path.join(imported,'Project/TOCs/Operator.fltoc'),'<CatapultToc><TocEntry Link="/absent.htm" /></CatapultToc>');
  await rejects(()=>call('import',...impArgs),/outside imported topics/);
+ writeFileSync(path.join(imported,'Project/TOCs/Operator.fltoc'),'<CatapultToc><TocEntry Link="/finish.htm" MadCap:conditions="Audience.Internal" /></CatapultToc>');
+ await rejects(()=>call('import',...impArgs),/requires conversion/);
  const backup=await call('export');const data=JSON.parse(readFileSync(backup.file,'utf8'));eq(Object.keys(data.records).length,8);eq(data.records.releases.length,2);ok(data.records.source_files.length>=4);
  await rejects(()=>call('export',`--out=${backup.file}`),/EEXIST/);
  await rejects(()=>call('add-project','--code=X','--name=No actor'),/actor/);

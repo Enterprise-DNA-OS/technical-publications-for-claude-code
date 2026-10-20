@@ -34,7 +34,7 @@ Topic codes derive from project code and original path, so repeated imports do n
 
 The base renderer handles headings, paragraphs, lists, basic tabular content, code, emphasis, supported images and links. It is not a Flare rendering engine. Conditions, snippets, variables, cross-reference elements, skins, advanced layouts, merged TOCs, scripts, video and exact pagination require conversion. Unconverted proprietary markup blocks release. Original files remain available. Neither Flare Online comments nor cloud permissions are present in a desktop project export. Recreate review assignments explicitly.
 
-The importer expects UTF-8 XHTML. Repeated topic entries or TOC links that do not resolve are rejected. Split exports larger than 100 MB into logical projects, and keep the originals outside Git.
+The importer expects UTF-8 XHTML. Conditional or variable TOCs, repeated topic entries and TOC links that do not resolve are rejected. Split exports larger than 100 MB into logical projects, and keep the originals outside Git.
 
 ## Check the switch
 
